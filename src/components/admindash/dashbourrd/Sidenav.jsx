@@ -21,7 +21,7 @@ function SideNav() {
 
         <div className="text-2xl flex flex-col space-y-10 pl-10 pt-16 text-primeryColor">
 
-            <NavLink to="/dashboard"> <i class="fa-brands fa-microsoft"></i> Dashboard</NavLink>
+            <NavLink to="/"> <i class="fa-brands fa-microsoft"></i> Dashboard</NavLink>
 
 
 

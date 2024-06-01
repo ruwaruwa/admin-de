@@ -1,114 +1,130 @@
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import SideNav from '../../admindash/dashbourrd/Sidenav';
 import SystemHeader from '../../admindash/systhemheader/Systemheader';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
-export default function Addpeyment() {
-    const [name, setName] = useState("");
-    const [amount, setAmount] = useState("");
-    const [paid, setPaid] = useState("");
-    const [rest, setRest] = useState("");
-    const [description, setDescription] = useState("");
-    const [date, setDate] = useState("");
-    const [serviceId, setServiceID] = useState("");
-    const params = useParams();
-
-    const handleSingleData = () => {
-        axios.get(`http://localhost:3000/patient/${params.id}`)
-            .then((response) => {
-                setName(response.data[0].name);
-            })
-            .catch((error) => console.log(error));
-    };
-
+const CreatePayment = () => {
+    const [services, setServices] = useState([]);
+    const [selectedServiceId, setSelectedServiceId] = useState('');
+    const [amount, setAmount] = useState('');
+    const [paid, setPaid] = useState('');
+    const [rest, setRest] = useState('');
+    const [description, setDescription] = useState('');
+    const [date, setDate] = useState('');
+    const navigate = useNavigate();
     useEffect(() => {
-        handleSingleData();
+        // Fetch the list of services from the backend
+        axios.get('http://localhost:3000/service')
+            .then(response => {
+                setServices(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the services!', error);
+            });
     }, []);
 
-    const navigate = useNavigate();
-
-    const hadleUpdate = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:3000/payment/${params.id}`, {
-    
-            'amount': amount,
-            'paid': paid,
-            'rest': rest,
-            'description': description,
-            'date': date,
-            'serviceid': serviceId
-        })
-        .then((response) => {
-            console.log(response.data);
-            if (response) {
-                toast.success('Successfully updated!');
-                navigate('/patient');
-            }
-        })
-        .catch((error) => console.log(error));
+
+        // Create the payment object
+        const payment = {
+            serviceid: selectedServiceId,
+            amount,
+            paid,
+            rest,
+            description,
+            date
+        };
+
+        // Send the payment data to the backend
+        axios.post('http://localhost:3000/peyment', payment)
+            .then(response => {
+               alert('Payment created successfully!', response.data);
+               navigate('/payment')
+                // Optionally, clear the form
+                setSelectedServiceId('');
+                setAmount('');
+                setPaid('');
+                setRest('');
+                setDescription('');
+                setDate('');
+            })
+            .catch(error => {
+                console.error('There was an error creating the payment!', error);
+            });
     };
 
     return (
-        <div>
-            <SideNav/>
+        <div className="">
+   <SideNav/>
             <SystemHeader/>
-            <div>
-                <div className='fle'>
-                    <div id='' className='shadow-lg shadow-gray-600 sm:mt-10 sm:w-[520px] w-[300px] ml-10 sm:h-[500px] h-[400px] px-2 sm:p-2 sm:px-4 sm:ml-[40%] mt-4 bg-seconderyColor purple-400'>
-                        <form>
-                            <h1 className='text-center text-2xl font-bold text-white'>Complain Update</h1>
-                            <div>
-                                <label className='text-ce ml-6 text-white text-'>Enter your Name</label><br/>
-                                <input value={name} onChange={(ev) => setName(ev.target.value)} type='text' placeholder='Enter your Name' className='outline-none px-5 w-full p-2 px'/>
-                            </div>
-                            <div>
-                                <label className='text-ce ml-6 text-white text-'>Enter your amount</label><br/>
-                                <input value={amount} onChange={(ev) => setAmount(ev.target.value)} type='number' placeholder='Enter your amount' className='outline-none px-5 w-full p-2 px'/>
-                            </div>
-                            <div>
-                                <label className='text-white text- ml-6'> Enter paid</label><br/>
-                                <input value={paid} onChange={(ev) => setPaid(ev.target.value)} type='number' className='outline-none px-5 w-full p-2' placeholder='Enter your paid'/>
-                            </div>
-                            <div>
-                                <label className='text-white text- ml-6'>Enter  rest</label><br/>
-                                <input value={rest} onChange={(ev) => setRest(ev.target.value)} type='number' className='outline-none px-6 p-2 w-full' placeholder='Enter your rest'/>
-                            </div>
-                            <div>
-                                <label className='text-white text- ml-6'>Enter your Description</label><br/>
-                                <input value={description} onChange={(ev) => setDescription(ev.target.value)} type='text' className='outline-none px-6 p-2 w-full' placeholder='Enter your description'/>
-                            </div>
-                            <div>
-                                <label className='text-white text- ml-6'>Select service</label><br/>
-                                <select value={serviceId} onChange={(ev) => setServiceID(ev.target.value)} className='outline-none px-6 p-2 w-full'>
-                                    <option>Select Service</option>
-                                    <option value='1'>Service 1</option>
-                                    <option value='2'>Service 2</option>
-                                    <option value='3'>Service 3</option>
-                                    <option value='4'>Service 4</option>
-                                    <option value='5'>Service 5</option>
-                                    <option value='6'>Service 6</option>
-                                    <option value='7'>Service 7</option>
-                                    <option value='8'>Service 8</option>
-                                    <option value='9'>Service 9</option>
-                                    <option value='10'>Service 10</option>
-                                    <option value='11'>Service 11</option>
-                                    <option value='12'>Service 12</option>
-                                    <option value='13'>Service 13</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className='text-white text- ml-6'>Choose your Date</label><br/>
-                                <input value={date} onChange={(ev) => setDate(ev.target.value)} type='date' className='outline-none px-6 p-2 w-full' placeholder='Enter your Date'/>
-                            </div>
-                            <div className='text-center'>
-                                <button onClick={hadleUpdate} className='text-white px-4 p-2 bg-orange-400 mt-3 sm:mt-2 mr-2 rounded-md'>Save</button>
-                            </div>
-                        </form>
-                    </div>
+<div className='shadow-lg shadow-gray-600 sm:mt-10 sm:w-[520px] w-[300px] ml-10 sm:h-[500px] h-[400px] px-2 sm:p-2 sm:px-4 sm:ml-[40%] mt-4 bg-seconderyColor purple-400'>
+            <h2 className='text-ce ml-6 text-white'>Create Payment</h2>
+            <form onSubmit={handleSubmit} className='bg -green-700 p -20'>
+                <div>
+                    <label className='text-ce ml-6 text-white'>Service</label>
+                    <select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} required  className='outline-none px-5 w-full p-2'>
+                        <option value="">Select a service</option>
+                        {services.map(service => (
+                            <option key={service._id} value={service._id}>
+                                {service.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-            </div>
+                <div>
+                    <label className='text-ce ml-6 text-white'>Amount</label>
+                    <input
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        required  className='outline-none px-5 w-full p-2'
+                    />
+                </div>
+                <div>
+                    <label className='text-ce ml-6 text-white'>Paid</label>
+                    <input
+                        type="number"
+                        value={paid}
+                        onChange={(e) => setPaid(e.target.value)}
+                        required  className='outline-none px-5 w-full p-2'
+                    />
+                </div>
+                <div>
+                    <label className='text-ce ml-6 text-white'>Rest</label>
+                    <input
+                        type="number"
+                        value={rest}
+                        onChange={(e) => setRest(e.target.value)}
+                        required  className='outline-none px-5 w-full p-2'
+                    />
+                </div>
+                <div>
+                    <label className='text-ce ml-6 text-white'>Description</label>
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required  className='outline-none px-5 w-full p-2'
+                    />
+                </div>
+                <div>
+                    <label className='text-ce ml-6 text-white'>Date</label>
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        required  className='outline-none px-5 w-full p-2'
+                    />
+                </div>
+                <button type="submit" className='text-white px-4 p-2 bg-orange-400 mt-3 j sm:mt-2 mr-2 sm:ml-[25%] rounded-md'>Create Payment</button>
+            </form>
         </div>
+        </div>
+      
     );
-}
+};
+
+export default CreatePayment;

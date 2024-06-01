@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import SystemHeader from '../admindash/systhemheader/Systemheader'
+import SideNav from '../admindash/dashbourrd/Sidenav'
 
 
 
@@ -53,7 +54,7 @@ export default function Addpatients() {
         {/* h-[100vh] bg-cover bg-gradient-to-b from-pink- 600 */}
         <div id='' className='shadow-lg shadow-gray-600 sm:mt-10 sm:w-[520px] w-[300px] ml-10 sm:h-[500px] h-[400px] px-2 sm:p-2 sm:px-4 sm:ml-[40%] mt-4 bg-seconderyColor purple-400'>
                         <form>
-                            <h1 className='text-center text-2xl font-bold text-white'>Complain Update</h1>
+                            <h1 className='text-center text-2xl font-bold text-white'>Patient</h1>
                             <div>
                                 <label className='text-ce ml-6 text-white text-'>Enter your Name</label><br></br>
                                 <input value={name} onChange={(ev)=>setName(ev.target.value)}  type='text' placeholder='Enter your Name' className='outline-none px-5 w-full p-2 px'/>

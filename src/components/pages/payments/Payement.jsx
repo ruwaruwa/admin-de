@@ -21,6 +21,7 @@ function Payments() {
 
     useEffect(() => {
         handleReadDonors()
+        handleReadPatients()
     }, [page])
 
     const handleNextButton = () => {
@@ -55,6 +56,12 @@ function Payments() {
     //         handleReadDonors()
     //     }
     // }
+    //get patien
+    const handleReadPatients = () => {
+        axios.get(`http://localhost:3000/patients/?page=${page}`).then((res) => {
+            setDonorData(res.data)
+        }).catch((error) => console.log(error))
+    }
 
     return <div>
         <SideNav />
@@ -70,7 +77,8 @@ function Payments() {
             <table className="table-auto w-full mt-4">
                 <thead className="border-b border-thirdColor">
                     <tr className="text-textColor text-center  font-medium">
-                    <th className="py-2">ServiceID</th>
+                    <th className="py-2">Patient Name</th>
+                    <th className="py-2">Service Name</th>
                         <th className="py-2">amount</th>
                         <th className="py-2">paid</th>
                         <th className="py-2">rest</th>
@@ -83,11 +91,14 @@ function Payments() {
                 </thead>
 
                 {
-                    donorData.length > 0 ? donorData.map((data) => {
+                    donorData.length > 0 ? donorData.map((data,index) => {
                         return <tbody className="border-b border-thirdColor">
-                            <tr className="text-textColor text-center">
-                              
-                               <td className="py-4">{data.id}</td>
+                            <tr key={index} className="text-textColor text-center">
+                         {/* //i went to get here service name from servtable and serviceable  like data.serviceName*/}
+                               {/* <td className="py-4">{data.serviceid.name}</td> */}
+                               <td className="py-4">{data.patienName}</td>
+                               <td className="py-4">{data.serviceid && data.serviceid.name ? data.serviceid.name : 'N/A'}</td>
+
                                 <td className="py-4">{data.amount}</td>
                                 <td className="py-4">{data.paid}</td>
                                 <td className="py-4">{data.rest}</td>

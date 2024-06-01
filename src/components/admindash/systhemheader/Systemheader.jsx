@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 
 function SystemHeader() {
-
+    const username = localStorage.getItem('user')
     const [isDown, setIsDown] = useState(false)
 
     const handleIsDown = () => {
@@ -14,7 +14,7 @@ function SystemHeader() {
     }
     const handleLOGOUT=()=>{
         localStorage.removeItem("user")
-        navigate('/login')
+        Navigate('/login')
     }
     return <div className="ml-[14%] border border-gray-100 shadow-md p-4 ">
         <h1 className="text-xl font-semibold text-seconderyColor">So<span className="text-fourthColor">m</span> </h1>
@@ -23,8 +23,9 @@ function SystemHeader() {
         </i> */}
 
         <div className="absolute top-4 right-12 flex border border-gray-100">
-            <div className="bg-primeryColor w-8 h-8 rounded-full">
-                <h1 className="text-2xl pl-2 cursor-pointer text-textColor">ruwa</h1>
+            <div className="bg-primeryColor w-8 h-8 p- 1 rounded-full">
+                <h1 className="text -xl pl- p -1 cursor-pointer text-textColor">  
+      </h1>
             </div>
             <i onClick={handleIsDown} class="fa-solid text-xl text-gray-400 pl-3 fa-chevron-down"></i>
         </div>

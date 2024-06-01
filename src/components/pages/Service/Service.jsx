@@ -55,8 +55,8 @@ export default function Service() {
             <table className="table-auto w-full mt-4">
                 <thead className="border-b border-thirdColor">
                     <tr className="text-textColor text-center  font-medium">
-                        <th className="py-2 font-bold text-xl">Services</th>
                         <th className="py-2">ID</th>
+                        <th className="py-2 font-bold text-xl">Services</th>
                         {/* <th className="py-2">Age</th>
                         <th className="py-2">Address</th>
                   
@@ -72,8 +72,8 @@ export default function Service() {
                     donorData.length > 0 ? donorData.map((data) => {
                         return <tbody className="border-b border-thirdColor">
                             <tr className="text-textColor text-center">
-                                <td className="py-4">{data.name}</td>
                                 <td>{data.id}</td>
+                                <td className="py-4">{data.name}</td>
                                 {/* <td className="py-4">{data.address}</td>
                           
                                 <td className="py-4">{data.phone}</td>
